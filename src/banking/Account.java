@@ -1,6 +1,7 @@
 package banking;
 
 
+import javax.smartcardio.Card;
 import java.lang.StringBuilder;
 import java.util.HashMap;
 import java.util.Random;
@@ -17,10 +18,18 @@ public class Account {
 
         this.pin = generateSequence(4);
         this.balance = 0;
-        do{
-            this.cardNumber = this.BIN + generateSequence(10);
-        } while(Cards.containsKey(cardNumber));
-        Cards.put(cardNumber, this);
+
+//        do{
+//
+//
+//        } while(Cards.containsKey(this.cardNumber));
+        String sequence;
+        do {
+            sequence = this.BIN + generateSequence(9);
+            sequence = sequence + generateLastDigit(sequence);
+        } while(Cards.containsKey(sequence));
+        this.cardNumber = sequence;
+        Cards.put(this.cardNumber, this);
 
     }
 
@@ -42,9 +51,24 @@ public class Account {
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
         for(int i = 0; i < n; i++) {
-            sb.append(random.nextInt(9));
+            sb.append(random.nextInt(10));
         }
         return sb.toString();
     }
 
+    public static String generateLastDigit(String cardNumber) {
+        int result = 0;
+
+        for (int i = 1; i <= cardNumber.length(); i++) {
+            int num = Integer.parseInt(cardNumber.substring(i - 1, i));
+            if (i % 2 != 0) {
+                num *= 2;
+                if (num > 9) num -= 9;
+            }
+            result += num;
+        }
+        result = result % 10 == 0 ? 0 : 10 - result % 10;
+
+        return "" + result;
+    }
 }
