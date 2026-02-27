@@ -17,9 +17,6 @@ public class Menu {
         scanner.close();
     }
 
-
-
-
     static void handleInput(){
 
         try {
