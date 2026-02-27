@@ -41,11 +41,19 @@ public class Menu {
                         String pin = scanner.nextLine();
                         logged = Actions.login(cardNumber, pin);
                     }else {
+                        System.out.println("Enter income:");
+                        int income = Integer.parseInt(scanner.nextLine());
 
+                        Actions.addIncome(income, logged);
+                    }
+                    break;
+
+                case 5:
+                case 3:
+                    if(logged != null) {
                         logged = null;
                         System.out.println("You have successfully logged out");
                     }
-
                     break;
                 case 0:
                     System.out.println("Bye!");
@@ -68,7 +76,8 @@ public class Menu {
             System.out.println("0. Exit");
         }else {
             System.out.println("1. Balance");
-            System.out.println("2. Log out");
+            System.out.println("2. Add income");
+            System.out.println("3. Log out");
             System.out.println("0. Exit");
         }
 

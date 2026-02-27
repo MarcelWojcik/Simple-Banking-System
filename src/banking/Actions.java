@@ -35,7 +35,7 @@ public class Actions {
                 System.out.println("Your card has been created");
                 System.out.println("Your card number:\n" + cardNumber);
                 System.out.println("Your card PIN:\n" + pin);
-                System.out.println("");
+                System.out.println();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -50,7 +50,7 @@ public class Actions {
 
         String getAccountSQL = String.format("""
                                 SELECT * FROM card WHERE number = ? AND pin = ?
-                                """, cardNumber, pin);
+                                """);
 
 
         try(Connection conn = dataSource.getConnection()){
@@ -96,6 +96,25 @@ public class Actions {
         }
 
         System.out.println("Balance: " + account.getBalance());
+
+    }
+
+    public static void addIncome(int income, Account logged){
+
+        String addIncomeSQL = """
+                        UPDATE card SET balance = balance + ? WHERE number = ?;
+                """;
+
+        try(Connection con = dataSource.getConnection()){
+            try(PreparedStatement stm = con.prepareStatement(addIncomeSQL)){
+                stm.setInt(1, income);
+                stm.setString(2, logged.getCardNumber());
+                stm.executeUpdate();
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Added income: " + income);
 
     }
 
