@@ -27,7 +27,7 @@ public class Menu {
                     if(logged == null) {
                         Actions.createAccount();
                     } else {
-                        System.out.println("Balance: " + logged.getBalance());
+                        Actions.printBalance(logged);
                     }
 
                     break;
@@ -41,6 +41,7 @@ public class Menu {
                         String pin = scanner.nextLine();
                         logged = Actions.login(cardNumber, pin);
                     }else {
+
                         logged = null;
                         System.out.println("You have successfully logged out");
                     }

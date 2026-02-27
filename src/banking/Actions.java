@@ -78,5 +78,25 @@ public class Actions {
 
     }
 
+    public static void printBalance(Account account){
+
+        String getBalanceSQL = String.format("""
+                                SELECT balance FROM card WHERE number = ?
+                                """);
+
+        try(Connection con = dataSource.getConnection()){
+            try(PreparedStatement statement = con.prepareStatement(getBalanceSQL)) {
+                statement.setString(1, account.getCardNumber());
+                ResultSet data = statement.executeQuery();
+                account.setBalance(data.getInt("balance"));
+            }
+
+        } catch( SQLException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Balance: " + account.getBalance());
+
+    }
 
 }
