@@ -1,10 +1,7 @@
 package banking;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Random;
+import java.sql.*;
+
 
 import static banking.Main.dataSource;
 
@@ -51,11 +48,19 @@ public class Actions {
 
     public static Account login(String cardNumber, String pin){
 
+        String getAccountSQL = String.format("""
+                                SELECT * FROM card WHERE number = ? AND pin = ?
+                                """, cardNumber, pin);
+
 
         try(Connection conn = dataSource.getConnection()){
-            try(Statement statement = conn.createStatement()) {
-                ResultSet data = statement.executeQuery(String.format("SELECT * FROM card WHERE number = '%s' AND pin = '%s'", cardNumber, pin)
-                );
+
+            try(PreparedStatement statement = conn.prepareStatement(getAccountSQL)) {
+
+                statement.setString(1, cardNumber);
+                statement.setString(2, pin);
+                ResultSet data = statement.executeQuery();
+
                 if(data.next()){
                     System.out.println("You have successfully logged in!");
                     return new Account(data.getString("number"), data.getInt("balance"));

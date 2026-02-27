@@ -8,7 +8,6 @@ public class Util {
     /**
      * @param n number of digits to generate
      *
-     *
      * @return String of {@code n} generated sequence of digits
      * */
     public static String generateSequence(int n){

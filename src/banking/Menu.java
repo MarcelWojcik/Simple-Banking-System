@@ -21,7 +21,7 @@ public class Menu {
 
         try {
             int choice = Integer.parseInt(scanner.nextLine());
-            System.out.println("");
+            System.out.println();
             switch(choice){
                 case 1: {
                     if(logged == null) {
@@ -56,8 +56,7 @@ public class Menu {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        System.out.println("");
-
+        System.out.println();
     }
 
 
@@ -73,6 +72,4 @@ public class Menu {
         }
 
     }
-
-
 }
