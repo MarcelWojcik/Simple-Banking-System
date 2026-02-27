@@ -99,4 +99,23 @@ public class Actions {
 
     }
 
+    public static void addIncome(int income, Account logged){
+
+        String addIncomeSQL = """
+                        UPDATE card SET balance = balance + ? WHERE number = ?;
+                """;
+
+        try(Connection con = dataSource.getConnection()){
+            try(PreparedStatement stm = con.prepareStatement(addIncomeSQL)){
+                stm.setInt(1, income);
+                stm.setString(2, logged.getCardNumber());
+                stm.executeUpdate();
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Added income: " + income);
+
+    }
+
 }
