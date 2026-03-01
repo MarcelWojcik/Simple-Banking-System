@@ -118,4 +118,66 @@ public class Actions {
 
     }
 
+    public static void transfer(Account logged, String cardNumber, int amount) {
+
+        try(Connection conn = dataSource.getConnection()) {
+            conn.setAutoCommit(false);
+            String checkMoneySQL = "SELECT balance FROM card WHERE number = ?;";
+            String sendMoneySQL = "UPDATE card SET balance = balance + ? WHERE number = ?;";
+            String getBalanceSQL = "UPDATE card  SET balance = balance - ? WHERE number = ?;";
+
+
+            try(PreparedStatement checkMoneyStatement = conn.prepareStatement(checkMoneySQL);
+                PreparedStatement sendMoneyStatement = conn.prepareStatement(sendMoneySQL);
+                PreparedStatement getBalanceStatement = conn.prepareStatement(getBalanceSQL);) {
+
+                checkMoneyStatement.setString(1, logged.getCardNumber());
+                ResultSet data = checkMoneyStatement.executeQuery();
+
+                sendMoneyStatement.setInt(1, amount);
+                sendMoneyStatement.setString(2, cardNumber);
+
+                getBalanceStatement.setInt(1, amount);
+                getBalanceStatement.setString(2, logged.getCardNumber());
+
+
+
+                sendMoneyStatement.executeUpdate();
+                getBalanceStatement.executeUpdate();
+
+                if(data.next() && data.getInt("balance") < amount) {
+                    conn.rollback();
+
+                    System.out.println("Not enough money!");
+                } else {
+                    conn.commit();
+                    System.out.println("Success!");
+                }
+
+            }catch (SQLException e) {
+                conn.rollback();
+                e.printStackTrace();
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+
+        }
+
+
+    }
+    public static boolean cardExists(String cardNumber) {
+        try(Connection conn = dataSource.getConnection()) {
+            String sql = "SELECT number FROM card WHERE number = ?";
+            try(PreparedStatement statement = conn.prepareStatement(sql)) {
+                statement.setString(1, cardNumber);
+                return statement.executeQuery().next();
+            }
+
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

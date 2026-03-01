@@ -5,6 +5,12 @@ import java.util.Random;
 
 public class Util {
 
+    public static boolean cardNumberIsValid(String cardNumber){
+        String cardPrefix = cardNumber.substring(0, cardNumber.length() - 1);
+        String lastDigit = cardNumber.substring(cardNumber.length() - 1);
+        return cardNumber.length() == 16 && cardNumber.startsWith(Account.BIN) && Integer.parseInt(lastDigit) == Integer.parseInt(generateLastDigit(cardPrefix));
+    }
+
     /**
      * @param n number of digits to generate
      *
