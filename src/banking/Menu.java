@@ -54,16 +54,17 @@ public class Menu {
                         System.out.println("Transfer");
                         System.out.println("Enter card number:");
                         String cardNumber = scanner.nextLine();
-                        if(Util.cardNumberIsValid(cardNumber)) {
-                        } else {
-                            System.out.println("Probably you made a mistake in the card number. Please try again!");
-                            break;
-                        }
+
                         if(logged.getCardNumber().equals(cardNumber)) {
                             System.out.println("You can't transfer money to the same account!");
                             break;
                         }
                         if(Actions.cardExists(cardNumber)) {
+                            if(Util.cardNumberIsValid(cardNumber)) {
+                            } else {
+                                System.out.println("Probably you made a mistake in the card number. Please try again!");
+                                break;
+                            }
                             System.out.println("Enter how much money you want to transfer:");
                             int amount = scanner.nextInt();
                             scanner.nextLine();
