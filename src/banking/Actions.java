@@ -165,6 +165,23 @@ public class Actions {
 
 
     }
+
+    public static boolean closeAccount(Account logged) {
+
+        try(Connection con = dataSource.getConnection()) {
+            String deleteAccountSQL = "DELETE FROM card where number = ?";
+            try(PreparedStatement statement = con.prepareStatement(deleteAccountSQL)) {
+                statement.setString(1, logged.getCardNumber());
+                statement.executeUpdate();
+                return true;
+            }
+        }catch (SQLException e) {
+
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static boolean cardExists(String cardNumber) {
         try(Connection conn = dataSource.getConnection()) {
             String sql = "SELECT number FROM card WHERE number = ?";
